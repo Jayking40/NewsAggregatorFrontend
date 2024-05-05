@@ -12,7 +12,7 @@ import {Router} from '@angular/router';
 import {Select, Store} from '@ngxs/store';
 import {catchError, filter, map, switchMap, take} from 'rxjs/operators';
 import { AppState } from '../store/app.state';
-import { AuthenticationService } from '../app/Services/authentication.service';
+import { AuthenticationService } from '../app/services/authentication.service';
 import { SetAccessToken } from '../store/app.action';
 
 
