@@ -1,0 +1,31 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <app-search-bar (searchKeyword)="searchByKeyword($event)"></app-search-bar>
+      <h2>News Articles</h2>
+      <div class="list-group">
+        <a *ngFor="let article of articles" href="#" class="list-group-item list-group-item-action">
+          <img *ngIf="article.urlToImage" [src]="article.urlToImage" class="img-thumbnail" alt="Thumbnail">
+          <h5 class="mb-1">{{ article.title }}</h5>
+          <p class="mb-1">{{ article.description }}</p>
+          <p>
+            <a href="{{ article.url }}" target="_blank" class="link">{{ article.url }}</a>
+          </p>
+          <small>{{ article.author ? 'By ' + article.author : 'Unknown author' }}</small>
+          &nbsp;
+          <small class="text-muted">{{ article.publishedAt | date:'medium' }}</small>
+          
+          <!-- Save to Favorite Button -->
+          <button class="btn-save-favorite" (click)="addToFavorites(article)">Save to Favorite</button>
+        </a>
+      </div>
+
+      <div class="loading-container" *ngIf="isLoading">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
