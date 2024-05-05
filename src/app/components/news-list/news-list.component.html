@@ -1,6 +1,10 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12">
+      <button class="btn-login" (click)="navigateToLogin()">Login</button>
+      @if(authService.isLoggedIn) {
+        <button class="btn-get-favorite" (click)="getUserFavorites()">Get User Favorite</button>
+      }
       <app-search-bar (searchKeyword)="searchByKeyword($event)"></app-search-bar>
       <h2>News Articles</h2>
       <div class="list-group">
@@ -14,7 +18,7 @@
           <small>{{ article.author ? 'By ' + article.author : 'Unknown author' }}</small>
           &nbsp;
           <small class="text-muted">{{ article.publishedAt | date:'medium' }}</small>
-          
+
           <!-- Save to Favorite Button -->
           <button class="btn-save-favorite" (click)="addToFavorites(article)">Save to Favorite</button>
         </a>
@@ -25,7 +29,16 @@
           <span class="visually-hidden">Loading...</span>
         </div>
       </div>
-
     </div>
   </div>
 </div>
+
+          <!-- Dropdown to display user favorites -->
+          <div *ngIf="showFavoritesDropdown" class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              User Favorites
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a *ngFor="let favorite of userFavorites" class="dropdown-item" href="#">{{ favorite.title }}</a>
+            </div>
+          </div>

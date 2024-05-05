@@ -27,29 +27,31 @@ export class SignupComponent {
 
   onSubmit() {
     const userData = {
-      name: this.name,
-      email: this.email,
-      password: this.password
+      "username": this.name,
+      "email": this.email,
+      "password": this.password
     };
 
-    this.signupService.signUp(userData).subscribe({
-      next: (res: any) => {
-        this.store.dispatch(new SetAccessToken(res.data.access_token));
-        this.store.dispatch(new SetUserData({
-          userName: res.data.userName,
-          userId: res.data.userId
-        }));
+    this.signupService.signUp(userData)
+      .subscribe({
+        next: (res) => {
+          this.store.dispatch(new SetAccessToken(res.accessToken));
+          this.store.dispatch(new SetUserData({
+            userName: res.username,
+            userId: res.userId
+          }));
 
-        this.router.navigate(['/']).then();
-        this.notification.success('Sign Up Successful', '');
-      },
-      error: (err) => {
-        if (err.error.statusCode === 400) {
-          this.notification.error(err.error.message, 'Signup Error');
-        } else {
-          this.notification.error('An error occurred', '');
+          this.router.navigate(['/']);
+          this.notification.success('Sign Up Successful', '');
+        },
+        error: (err) => {
+          if (err.error.statusCode === 400) {
+            this.notification.error(err.error.message, 'Signup Error');
+          } else {
+            this.notification.error('An error occurred. Please try again.', '');
+            // Consider logging the error for debugging
+          }
         }
-      }
-    });
+      });
   }
 }

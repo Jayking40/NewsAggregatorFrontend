@@ -3,7 +3,10 @@ import { NewsService } from '../../services/news.service';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { SearchBarComponent } from '../search-bar/search-bar.component';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
-import { delay } from 'rxjs/operators';
+import { catchError, delay, tap } from 'rxjs/operators';
+import { AuthenticationService } from '../../services/authentication.service';
+import { Router } from '@angular/router';
+import { Observable, throwError } from 'rxjs';
 
 
 @Component({
@@ -19,14 +22,27 @@ export class NewsListComponent implements OnInit {
   currentPage = 1;
   pageSize = 10;
   isLoading: boolean = false;
+  showFavoritesDropdown: boolean = false;
+  userFavorites: any[] = [];
 
-  constructor(private newsService: NewsService, @Inject(PLATFORM_ID) private platformId: Object) { }
+  userId = '6637b68db08c54153495633c';
+
+  constructor(
+    private newsService: NewsService,
+    @Inject(PLATFORM_ID) private platformId: Object,
+    public authService: AuthenticationService,
+    private router: Router,
+  ) { }
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
       this.getTopHeadlines(this.currentPage);
       window.addEventListener('scroll', this.onScroll.bind(this));
     }
+  }
+
+  navigateToLogin() {
+    this.router.navigate(['/login']);
   }
 
   getTopHeadlines(pageNumber: number) {
@@ -85,7 +101,30 @@ export class NewsListComponent implements OnInit {
     }
   }
 
-  addToFavorites(payload: any) {
+  addToFavorites(payload: any): Observable<any> {
+    return this.authService.favorite(payload)
+      .pipe(
+        tap(response => {
+          console.log("Favorites API response:", response);
+        }),
+        catchError(error => {
+          console.error("Error adding to favorites:", error);
+          return throwError(error);
+        })
+      );
+  }
 
+  getUserFavorites() {
+    this.authService.allFavorite()
+      .pipe(
+        tap(response => {
+          console.log("Favorites API response:", response);
+          this.userFavorites = response;
+        }),
+        catchError(error => {
+          console.error("Error getting user favorites:", error);
+          return throwError(error);
+        })
+      ).subscribe();
   }
 }

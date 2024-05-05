@@ -95,3 +95,49 @@ small {
 .btn-save-favorite:hover {
   background-color: blue;
 }
+
+
+/* Dropdown */
+.dropdown-menu {
+  position: absolute;
+  right: 0;
+}
+
+.dropdown-item {
+  display: block;
+  width: 300px; /* adjust width as needed */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.btn-login {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #41b883;
+  border-color: #41b883;
+  color: #fff;
+  border-radius: 4px;
+  padding: 10px 20px;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
+}
+
+/* Get User Favorite button */
+.btn-get-favorite {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  position: absolute;
+  top: 10px;
+  right: 100px;
+  background-color: #41b883;
+  border-color: #41b883;
+  color: #fff;
+  border-radius: 4px;
+  padding: 10px 20px;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
+
+}
+

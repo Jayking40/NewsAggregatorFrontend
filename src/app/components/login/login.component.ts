@@ -26,31 +26,31 @@ export class LoginComponent {
 
   onSubmit() {
     const credentials = {
-      email: this.email,
-      password: this.password
+      "email": this.email,
+      "password": this.password
     };
 
-    this.loginService.login(credentials).subscribe({
-      next: (res: any) => {
-        this.store.dispatch(new SetAccessToken(res.data.access_token));
-        this.store.dispatch(
-          new SetUserData({
-            userName: res.data.userName,
-            userId: res.data.userId,
-          })
-        );
+    this.loginService.login(credentials)
+      .subscribe({
+        next: (res) => {
+          this.store.dispatch(new SetAccessToken(res.accessToken));
+          this.store.dispatch(new SetUserData({
+            userName: res.username,
+            userId: res.userId
+          }));
 
-        this.router.navigate(['/']).then();
-        this.notification.success('Login Successful', '');
-      },
-      error: (err) => {
-        if (err.error.statusCode === 403) {
-          this.notification.error(err.error.message, '');
-        } else {
-          this.notification.error('An error occurred', '');
+          this.router.navigate(['/']);
+          this.notification.success(`Welcome back, ${res.username}!`, ''); // Personalized success message
+        },
+        error: (err) => {
+          if (err.error.statusCode === 403) {
+            this.notification.error(err.error.message, ''); // Specific error message
+          } else {
+            this.notification.error('An error occurred. Please try again.', ''); // Improved error message
+            // Consider logging the error for debugging
+          }
         }
-      },
-    });
+      });
   }
 
 }
